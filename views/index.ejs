@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link href="/assets/components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+  <link href="/assets/css/app.css" rel="stylesheet" />
+</head>
+<body ng-app="ghStats">
+  <div ui-view></div>
+
+  <script src="/assets/components/lodash/dist/lodash.js"></script>
+  <script src="/assets/components/jquery/dist/jquery.js"></script>
+  <script src="/assets/components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/assets/components/angular/angular.js"></script>
+  <script src="/assets/components/angular-ui-router/release/angular-ui-router.js"></script>
+
+  <script>
+    
+    var app = angular.module('ghStats', ['ui.router']);
+
+    app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+      $stateProvider
+        .state({
+          name: 'home',
+          url: '/',
+          templateUrl: 'assets/views/home.html',
+          controller: 'HomeController'
+        })
+        .state({
+          name: 'user_details',
+          url: '/user/:username',
+          templateUrl: 'assets/views/user_details.html',
+          controller: 'UserDetailsController'
+        });
+    }]);
+
+    app.factory('GitHubApi', ['$http', function($http) {
+      var
+        apiUrl = 'https://api.github.com/';
+
+      return {
+        getUserData: getUserData
+      };
+
+      function getUserData(user) {
+        return $http.get(apiUrl + 'users/' + user)
+          .then(prepareUserData);
+      }
+
+      function prepareUserData(response) {
+        var d = response.data;
+
+        return {
+          name: d.name,
+          avatar: d.avatar_url,
+          company: d.company || '(no company)'
+        };
+      }
+    }]);
+
+    app.controller('HomeController', ['$scope', '$state', function($scope, $state) {
+      $scope.userName = '';
+      $scope.onSubmit = onSubmit;
+
+      function onSubmit(e) {
+        $state.go('user_details', { username: $scope.userName });
+      }
+    }]);
+
+    app.controller('UserDetailsController', ['$scope', 'GitHubApi', '$stateParams', function($scope, gh, $stateParams) {
+      gh.getUserData($stateParams.username)
+        .then(displayUserData)
+        .catch(displayError);
+
+      function displayUserData(userData) {
+        $scope.userData = userData;
+        console.log('userData', $scope.userData);
+      }
+
+      function displayError(err) {
+        console.log('ERROR', err);
+      }
+    }]);
+
+  </script>
+</body>
+</html>
