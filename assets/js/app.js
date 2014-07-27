@@ -30,9 +30,7 @@
         name: 'repo_details',
         url: '/user/:username/repos/:repo_name',
         templateUrl: 'assets/views/repo_details.html',
-        controller: function($scope, $stateParams) {
-          console.log('show repo', $stateParams.repo_name);
-        }
+        controller: 'RepoDetailsController'
       })
 
       .state({

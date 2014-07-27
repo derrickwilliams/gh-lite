@@ -1,8 +1,20 @@
 (function() {
 
-  var app = angular.module('ghLite');
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  app.controller('UserReposController', ['$scope', 'targetUser', 'githubApi', function($scope, targetUser, gh) {
+  definition = [
+    '$scope',
+    'targetUser',
+    'githubApi',
+    'dataStore',
+    fn
+  ];
+
+  app.controller('UserReposController', definition);
+
+  function fn($scope, targetUser, gh, ds) {
     var
       user = targetUser.get();
 
@@ -14,6 +26,7 @@
 
     function showUserRepos(repos) {
       $scope.repos = repos;
+      ds.set('repos', groupByName(repos));
     }
 
     function showReposError(err) {
@@ -23,6 +36,16 @@
     function detailsUrl(repoName) {
       return '#/user/' + user.username + '/repos/' + repoName;
     }
-  }]);
+
+    function groupByName(repos) {
+      var byName = {};
+
+      _.each(repos, function(repo) {
+        byName[repo.name] = repo;
+      });
+
+      return byName;
+    }
+  }
 
 })();

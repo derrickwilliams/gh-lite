@@ -1,0 +1,35 @@
+{
+  "name": "c3",
+  "main": "c3.min.js",
+  "version": "0.2.4",
+  "homepage": "https://github.com/masayuki0812/c3",
+  "authors": [
+    "Masayuki Tanaka <masayuki0812@mac.com>"
+  ],
+  "description": "D3-based reusable chart library",
+  "keywords": [
+    "chart",
+    "d3"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.4.4"
+  },
+  "_release": "0.2.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.4",
+    "commit": "a32189484577b2c99a67f25bd8998c9a58d1e3bd"
+  },
+  "_source": "git://github.com/masayuki0812/c3.git",
+  "_target": "~0.2.4",
+  "_originalSource": "c3",
+  "_direct": true
+}

@@ -1,14 +1,25 @@
 (function() {
 
-  var app = angular.module('ghLite');
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  app.factory('githubApi', ['$http', function($http) {
+  definition = [
+    '$q',
+    '$http',
+    fn
+  ];
+
+  app.factory('githubApi', definition);
+
+  function fn($q, $http) {
     var
       apiUrl = 'https://api.github.com/';
 
     return {
       getUserData: getUserData,
-      getUserRepos: getUserRepos
+      getUserRepos: getUserRepos,
+      getRepoData: getRepoData
     };
 
     function getUserData(user) {
@@ -18,18 +29,67 @@
 
     function getUserRepos(user) {
       return $http.get(apiUrl + 'users/' + user + '/repos')
-        .then(prepare);
+        .then(prepare)
+        .then(getLanguages)
+        .then(indexByName);
 
       function prepare(response) {
-        var d = response.data;
+        var 
+          d = response.data,
+          prepared;
 
-        return _.map(d, function(repo) {
+        prepared =  _.map(d, function(repo) {
           return {
             name: repo.name,
-            url: repo.html_url
+            url: repo.html_url,
+            languages: repo.languages_url
           };
         });
+
+        return prepared;
       }
+
+      function getLanguages(repos) {
+        var 
+          deferred = $q.defer();
+
+        $q.all(getLanguagePromises(repos))
+          .then(function(results) {
+            _.each(results, function(result, i) {
+              repos[i].languages = result.data;
+            });
+
+            deferred.resolve(repos);
+          })
+          .catch(function(err){
+            deferred.reject(err);
+          });
+
+        return deferred.promise;
+      }
+
+      function indexByName(repos) {
+        var indexed = {};
+
+        _.each(repos, function byName(repo) {
+          indexed[repo.name] = repo;
+        });
+
+        return indexed;
+      }
+
+      function getLanguagePromises(repos) {
+        return _.map(repos, function(repo) {
+          return $http.get(repo.languages);
+        });
+      }
+    }
+
+    function getRepoData(user, repo) {
+      return $http.get(apiUrl + '/repos/' + user + '/' + repo + '/stats')
+        .then(function(data) {
+          console.log('got repo data', data);
+        });
     }
 
     function prepareUserData(response) {
@@ -43,6 +103,6 @@
         reposUrl: d.repos_url
       };
     }
-  }]);
+  }
 
 })();

@@ -1,1 +1,10 @@
-repo_details.html
+<h1>{{repo.name}}</h1>
+
+<ul class="list-group">
+  <li class="list-group-item" ng-repeat="language in languages">
+    name: {{language.name}} <br />
+    size: {{language.size}}
+  </li>
+</ul>
+
+<div id="languagesChart"></div>

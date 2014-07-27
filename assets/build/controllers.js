@@ -15,10 +15,86 @@
 
 })();
 (function() {
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  var app = angular.module('ghLite');
+  definition = [
+    '$scope',
+    '$stateParams',
+    'githubApi',
+    'dataStore',
+    'targetUser',
+    fn
+  ];
 
-  app.controller('UserDetailsController', ['$scope', 'githubApi', '$stateParams', 'targetUser', function($scope, gh, $stateParams, targetUser) {
+  app.controller('RepoDetailsController', definition);
+
+  function fn($scope, $stateParams, gh, ds, user) {
+    var 
+      repo;
+
+    repo = ds.get('repos')[$stateParams.repo_name];
+
+    $scope.repo = repo;
+    $scope.languages = _.map(repo.languages, function mapLanguages(size, name) {
+      return {
+        name: name,
+        size: size
+      };
+    });
+
+    showChart();
+
+
+
+    function showChart() {
+      var 
+        data = getPieData(),
+        chart;
+
+      console.log('pie data', data);
+
+      chart = c3.generate({
+        bindto: document.querySelector('#languagesChart'),
+        data: {
+          columns: data,
+          type : 'donut'
+        },
+        donut: {
+          title: "Languages"
+        }
+      });
+    }
+
+    function getPieData() {
+      var cols = [];
+      _.each($scope.languages, function formatForPie(lang) {
+        cols.push([lang.name, lang.size]);
+      });
+
+      return cols;
+    }
+  }
+})();
+(function() {
+
+  var 
+    app = angular.module('ghLite'),
+    definition;
+
+  definition = [
+    '$scope',
+    'githubApi',
+    '$stateParams',
+    'targetUser',
+    'dataStore',
+    fn
+  ];
+
+  app.controller('UserDetailsController', definition);
+
+  function fn($scope, gh, $stateParams, targetUser, ds) {
     $scope.username = $stateParams.username;
 
     gh.getUserData($scope.username)
@@ -28,13 +104,12 @@
     function displayUserData(userData) {
       $scope.userData = userData;
       targetUser.set($scope.userData);
-      console.log('userData', $scope.userData);
     }
 
     function displayError(err) {
       console.log('ERROR', err);
     }
-  }]);
+  }
 
 })();
 (function() {
@@ -48,9 +123,21 @@
 })();
 (function() {
 
-  var app = angular.module('ghLite');
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  app.controller('UserReposController', ['$scope', 'targetUser', 'githubApi', function($scope, targetUser, gh) {
+  definition = [
+    '$scope',
+    'targetUser',
+    'githubApi',
+    'dataStore',
+    fn
+  ];
+
+  app.controller('UserReposController', definition);
+
+  function fn($scope, targetUser, gh, ds) {
     var
       user = targetUser.get();
 
@@ -62,6 +149,7 @@
 
     function showUserRepos(repos) {
       $scope.repos = repos;
+      ds.set('repos', groupByName(repos));
     }
 
     function showReposError(err) {
@@ -71,6 +159,16 @@
     function detailsUrl(repoName) {
       return '#/user/' + user.username + '/repos/' + repoName;
     }
-  }]);
+
+    function groupByName(repos) {
+      var byName = {};
+
+      _.each(repos, function(repo) {
+        byName[repo.name] = repo;
+      });
+
+      return byName;
+    }
+  }
 
 })();

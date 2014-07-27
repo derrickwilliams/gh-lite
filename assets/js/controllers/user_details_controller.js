@@ -1,8 +1,21 @@
 (function() {
 
-  var app = angular.module('ghLite');
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  app.controller('UserDetailsController', ['$scope', 'githubApi', '$stateParams', 'targetUser', function($scope, gh, $stateParams, targetUser) {
+  definition = [
+    '$scope',
+    'githubApi',
+    '$stateParams',
+    'targetUser',
+    'dataStore',
+    fn
+  ];
+
+  app.controller('UserDetailsController', definition);
+
+  function fn($scope, gh, $stateParams, targetUser, ds) {
     $scope.username = $stateParams.username;
 
     gh.getUserData($scope.username)
@@ -12,12 +25,11 @@
     function displayUserData(userData) {
       $scope.userData = userData;
       targetUser.set($scope.userData);
-      console.log('userData', $scope.userData);
     }
 
     function displayError(err) {
       console.log('ERROR', err);
     }
-  }]);
+  }
 
 })();
