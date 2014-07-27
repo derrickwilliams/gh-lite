@@ -28,11 +28,9 @@
       };
     });
 
-    showChart();
+    showLanguagesChart();
 
-
-
-    function showChart() {
+    function showLanguagesChart() {
       var 
         data = getPieData(),
         chart;
