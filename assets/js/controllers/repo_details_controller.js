@@ -28,14 +28,12 @@
       };
     });
 
-    showLanguagesChart();
+    showLanguagesChart  ();
 
-    function showLanguagesChart() {
+    function showLanguagesChart () {
       var 
         data = getPieData(),
         chart;
-
-      console.log('pie data', data);
 
       chart = c3.generate({
         bindto: document.querySelector('#languagesChart'),

@@ -8,7 +8,8 @@
 
     return {
       get: get,
-      set: set
+      set: set,
+      exists: keyExists
     };
 
     function get(key) {

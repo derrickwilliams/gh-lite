@@ -54,18 +54,22 @@
           deferred = $q.defer();
 
         $q.all(getLanguagePromises(repos))
-          .then(function(results) {
-            _.each(results, function(result, i) {
-              repos[i].languages = result.data;
-            });
-
-            deferred.resolve(repos);
-          })
-          .catch(function(err){
-            deferred.reject(err);
-          });
+          .then(setAllLanguages)
+          .catch(allLanguagesError);
 
         return deferred.promise;
+
+        function setAllLanguages(results) {
+          _.each(results, function setLanguages(result, i) {
+            repos[i].languages = result.data;
+          });
+
+          deferred.resolve(repos);
+        }
+
+        function allLanguagesError(err){
+          deferred.reject(err);
+        }
       }
 
       function indexByName(repos) {

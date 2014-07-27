@@ -20,13 +20,18 @@
 
     $scope.detailsUrl = detailsUrl;
     
-    gh.getUserRepos(user.username)
-      .then(showUserRepos)
-      .catch(showReposError);
+    if (ds.exists('repos')) {
+      showUserRepos(ds.get('repos'));
+    }
+    else {
+      gh.getUserRepos(user.username)
+        .then(showUserRepos)
+        .catch(showReposError);
+    }
 
     function showUserRepos(repos) {
       $scope.repos = repos;
-      ds.set('repos', groupByName(repos));
+      ds.set('repos', repos);
     }
 
     function showReposError(err) {
@@ -35,16 +40,6 @@
 
     function detailsUrl(repoName) {
       return '#/user/' + user.username + '/repos/' + repoName;
-    }
-
-    function groupByName(repos) {
-      var byName = {};
-
-      _.each(repos, function(repo) {
-        byName[repo.name] = repo;
-      });
-
-      return byName;
     }
   }
 

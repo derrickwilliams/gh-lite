@@ -89,16 +89,12 @@
       };
     });
 
-    showChart();
+    showLanguagesChart  ();
 
-
-
-    function showChart() {
+    function showLanguagesChart () {
       var 
         data = getPieData(),
         chart;
-
-      console.log('pie data', data);
 
       chart = c3.generate({
         bindto: document.querySelector('#languagesChart'),
@@ -188,13 +184,18 @@
 
     $scope.detailsUrl = detailsUrl;
     
-    gh.getUserRepos(user.username)
-      .then(showUserRepos)
-      .catch(showReposError);
+    if (ds.exists('repos')) {
+      showUserRepos(ds.get('repos'));
+    }
+    else {
+      gh.getUserRepos(user.username)
+        .then(showUserRepos)
+        .catch(showReposError);
+    }
 
     function showUserRepos(repos) {
       $scope.repos = repos;
-      ds.set('repos', groupByName(repos));
+      ds.set('repos', repos);
     }
 
     function showReposError(err) {
@@ -203,16 +204,6 @@
 
     function detailsUrl(repoName) {
       return '#/user/' + user.username + '/repos/' + repoName;
-    }
-
-    function groupByName(repos) {
-      var byName = {};
-
-      _.each(repos, function(repo) {
-        byName[repo.name] = repo;
-      });
-
-      return byName;
     }
   }
 
@@ -227,7 +218,8 @@
 
     return {
       get: get,
-      set: set
+      set: set,
+      exists: keyExists
     };
 
     function get(key) {
@@ -300,18 +292,22 @@
           deferred = $q.defer();
 
         $q.all(getLanguagePromises(repos))
-          .then(function(results) {
-            _.each(results, function(result, i) {
-              repos[i].languages = result.data;
-            });
-
-            deferred.resolve(repos);
-          })
-          .catch(function(err){
-            deferred.reject(err);
-          });
+          .then(setAllLanguages)
+          .catch(allLanguagesError);
 
         return deferred.promise;
+
+        function setAllLanguages(results) {
+          _.each(results, function setLanguages(result, i) {
+            repos[i].languages = result.data;
+          });
+
+          deferred.resolve(repos);
+        }
+
+        function allLanguagesError(err){
+          deferred.reject(err);
+        }
       }
 
       function indexByName(repos) {
