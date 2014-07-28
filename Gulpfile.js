@@ -11,6 +11,7 @@ gulp.task('build', ['build:sass', 'build:js']);
 gulp.task('build:sass', function() {
   gulp.src('./assets/css/**/*.scss')
     .pipe(sass())
+    .pipe(concat('app.css'))
     .pipe(gulp.dest('./assets/css'));
 });
 

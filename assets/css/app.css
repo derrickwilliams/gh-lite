@@ -40,23 +40,6 @@ a:hover.dw-btn {
     width: 100%;
     margin-bottom: 5px; }
 
-@media (min-width: 320px) and (max-width: 700px) {
-  .sm-full {
-    width: 100%;
-    margin-bottom: 30px; }
-    .sm-full.username-input {
-      margin-bottom: 15px; } }
-
-@media (min-width: 701px) {
-  .md-half {
-    width: 48%;
-    float: left;
-    margin-left: 2%; }
-    .md-half.username-input {
-      width: 73%; }
-    .md-half.get-user-info-submit {
-      width: 23%; } }
-
 .repo-details-link {
   margin-right: 10px;
   margin-bottom: 10px; }
@@ -75,3 +58,22 @@ a:hover.dw-btn {
     background-color: #efefef;
     padding: 10px 15px;
     margin-bottom: 10px; }
+
+/* iPad portrait and smaller */
+@media (max-width: 768px) {
+  .sm-full {
+    width: 100%;
+    margin-bottom: 30px; }
+    .sm-full.username-input {
+      margin-bottom: 15px; } }
+
+/* bigger than iPad portrait */
+@media (min-width: 769px) {
+  .md-half {
+    width: 48%;
+    float: left;
+    margin-left: 2%; }
+    .md-half.username-input {
+      width: 73%; }
+    .md-half.get-user-info-submit {
+      width: 23%; } }

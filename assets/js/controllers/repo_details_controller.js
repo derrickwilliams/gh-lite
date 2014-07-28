@@ -9,14 +9,20 @@
     'githubApi',
     'dataStore',
     'targetUser',
+    '$state',
     fn
   ];
 
   app.controller('RepoDetailsController', definition);
 
-  function fn($scope, $stateParams, gh, ds, user) {
+  function fn($scope, $stateParams, gh, ds, user, $state) {
     var 
       repo;
+
+    if (!ds.exists('repos')) {
+      $state.go('home');
+      return;
+    }
 
     repo = ds.get('repos')[$stateParams.repo_name];
 

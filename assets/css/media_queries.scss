@@ -1,0 +1,28 @@
+/* iPad portrait and smaller */
+@media (max-width: 768px) {
+  .sm-full {
+    width: 100%;
+    margin-bottom: 30px;
+
+    &.username-input {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+/* bigger than iPad portrait */
+@media (min-width: 769px) {
+  .md-half {
+    width: 48%;
+    float: left;
+    margin-left: 2%;
+
+    &.username-input {
+      width: 73%;
+    }
+
+    &.get-user-info-submit {
+      width: 23%
+    }
+  }
+}

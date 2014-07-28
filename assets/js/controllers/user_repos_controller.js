@@ -10,19 +10,25 @@
     'githubApi',
     'dataStore',
     'stats',
+    '$state',
     fn
   ];
 
   app.controller('UserReposController', definition);
 
-  function fn($scope, targetUser, gh, ds, stats) {
+  function fn($scope, targetUser, gh, ds, stats, $state) {
     var
       user = targetUser.get(),
       loading = true;
 
+    if (!user) {
+      $state.go('home');
+      return;
+    }
+
     $scope.detailsUrl = detailsUrl;
     $scope.isLoading = isLoading;
-    
+
     if (ds.exists('repos')) {
       showUserRepos(ds.get('repos'));
       showRepoStats();
