@@ -1,0 +1,6 @@
+<ul class="commits-list">
+  <li ng-repeat="commit in commits | limitTo: limit">
+    <strong>"{{commit.message}}"</strong><br />
+    <em>by: {{commit.author.name}}</em>
+  </li>
+</ul>

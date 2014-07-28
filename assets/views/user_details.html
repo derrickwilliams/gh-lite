@@ -1,20 +1,11 @@
 <div class="my-container">
   <h1>User Details</h1>
   <div ng-show="userData">
-    <section class="sm-full md-half">
-      <img class="user-avatar" ng-src="{{userData.avatar}}" />
-    </section>
     
     <section class="sm-full md-half">
-      <section class="user-info">
-        <p class="user-name"><strong>Name:</strong> {{userData.name}}</p>
-        <p class="user-company"><strong>Company:</strong> {{userData.company}}</p>
-      </section>
-      
-      <ul class="section-list">
-        <li><a class="dw-btn" href="#/user/{{username}}/repos">Repos</a></li>
-        <li><a class="dw-btn" href="#/user/{{username}}/orgs">Organizations</a></li>
-      </ul>
+      <user:avatar avatar-src="userData.avatar" />
     </section>
+    
+    <user:details:section user="userData" username="username" />
   </div>
 </div>

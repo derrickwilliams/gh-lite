@@ -16,15 +16,10 @@
   function fn($scope, $state, ds) {
     $scope.username = '';
     $scope.onSubmit = onSubmit;
-    $scope.submitDisabled = submitDisabled;
 
     function onSubmit(e) {
       ds.set('repos', undefined);
       $state.go('user_details', { username: $scope.username });
-    }
-
-    function submitDisabled() {
-      return $scope.username.length === 0;
     }
   }
 
@@ -54,40 +49,6 @@
     $scope.repo = repo;
     $scope.languages = _.map(repo.languages, mapLanguages);
     $scope.commits = _.map(repo.commits, mapCommits);
-
-    $scope.hasLanguages = hasLanguages;
-
-    _.defer(showLanguagesChart);
-
-    function showLanguagesChart () {
-      var 
-        data = getPieData(),
-        chart;
-
-      chart = c3.generate({
-        bindto: document.querySelector('#languagesChart'),
-        data: {
-          columns: data,
-          type : 'donut'
-        },
-        donut: {
-          title: "Languages"
-        }
-      });
-    }
-
-    function getPieData() {
-      var cols = [];
-      _.each($scope.languages, function formatForPie(lang) {
-        cols.push([lang.name, lang.size]);
-      });
-
-      return cols;
-    }
-
-    function hasLanguages() {
-      return $scope.languages.length > 0;
-    }
 
     function mapLanguages(size, name) {
       return {

@@ -14,7 +14,7 @@ gulp.task('build:sass', function() {
     .pipe(gulp.dest('./assets/css'));
 });
 
-gulp.task('build:js', ['build:controllers', 'build:services'], function() {
+gulp.task('build:js', ['build:controllers', 'build:services', 'build:directives'], function() {
   return gulp.src(['./assets/js/app.js', './assets/build/**/*.js', '!./assets/build/build.js'])
     .pipe(concat('build.js'))
     .pipe(gulp.dest('./assets/build/'));
@@ -29,6 +29,12 @@ gulp.task('build:controllers', function() {
 gulp.task('build:services', function() {
   return gulp.src('./assets/js/services/**/*.js')
     .pipe(concat('services.js'))
+    .pipe(gulp.dest('./assets/build/'));
+});
+
+gulp.task('build:directives', function() {
+  return gulp.src('./assets/js/directives/**/*.js')
+    .pipe(concat('directives.js'))
     .pipe(gulp.dest('./assets/build/'));
 });
 

@@ -2,20 +2,11 @@
   <h1 class="text-center main-header">{{repo.name}}</h1>
 
   <div class="sm-full md-half">
-    <h3>Language breakdown</h3>
-    
-    <p class="view-notice" ng-if="!hasLanguages()">This repo has no detectable languages. <a href="{{repo.url}}">View on github.</a></p>
-
-    <div ng-if="hasLanguages()" id="languagesChart"></div>
+    <section language-breakdown languages="languages"></section>
   </div>
 
   <div class=" sm-full md-half">
     <h3>Most recent commits</h3>
-    <ul class="commits-list">
-      <li ng-repeat="commit in commits | limitTo: 5">
-        <strong>"{{commit.message}}"</strong><br />
-        <em>by: {{commit.author.name}}</em>
-      </li>
-    </ul>
+    <section commits-list commits="commits" limit="5"></section>
   </div>
 </div>
