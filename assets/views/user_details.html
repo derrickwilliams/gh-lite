@@ -1,13 +1,15 @@
-<h1>User Details</h1>
-<div ng-show="userData">
-  <h3>User Information</h3>
-  
-  <p class="user-name"><strong>Name:</strong> {{userData.name}}</p>
-  <p class="user-company"><strong>Company:</strong> {{userData.company}}</p>
-  <img class="user-avatar" src="{{userData.avatar}}" />
-  
-  <ul class="section-list">
-    <li><a href="#/user/{{username}}/repos">Repos</a></li>
-    <li><a href="#/user/{{username}}/orgs">Organizations</a></li>
-  </ul>
+<div class="my-container">
+  <h1>User Details</h1>
+  <div ng-show="userData">
+    <h3>User Information</h3>
+    
+    <p class="user-name"><strong>Name:</strong> {{userData.name}}</p>
+    <p class="user-company"><strong>Company:</strong> {{userData.company}}</p>
+    <img class="user-avatar" src="{{userData.avatar}}" />
+    
+    <ul class="section-list">
+      <li><a href="#/user/{{username}}/repos">Repos</a></li>
+      <li><a href="#/user/{{username}}/orgs">Organizations</a></li>
+    </ul>
+  </div>
 </div>

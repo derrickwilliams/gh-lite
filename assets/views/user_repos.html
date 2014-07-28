@@ -1,3 +1,11 @@
-<ul class="repos-list" ng-repeat="repo in repos">
-  <li><a href="{{detailsUrl(repo.name)}}">{{repo.name}}</a> | <a href="{{repo.url}}">view on github</a></li>
-</ul>
+<div class="my-container">
+  <div class="text-center">
+    <h3>Repositories</h3>
+    <p ng-if="isLoading()">Loading...</p>
+    <a class="btn btn-primary repo-details-link" href="{{detailsUrl(repo.name)}}" ng-repeat="repo in repos">{{repo.name}}</a> 
+
+    <h3>Total bytes per language</h3>
+    <p ng-if="isLoading()">Loading...</p>
+    <div id="languagesStats"></div>
+  </div>
+</div>

@@ -21,14 +21,12 @@
     repo = ds.get('repos')[$stateParams.repo_name];
 
     $scope.repo = repo;
-    $scope.languages = _.map(repo.languages, function mapLanguages(size, name) {
-      return {
-        name: name,
-        size: size
-      };
-    });
+    $scope.languages = _.map(repo.languages, mapLanguages);
+    $scope.commits = _.map(repo.commits, mapCommits);
 
-    showLanguagesChart  ();
+    $scope.hasLanguages = hasLanguages;
+
+    _.defer(showLanguagesChart);
 
     function showLanguagesChart () {
       var 
@@ -54,6 +52,21 @@
       });
 
       return cols;
+    }
+
+    function hasLanguages() {
+      return $scope.languages.length > 0;
+    }
+
+    function mapLanguages(size, name) {
+      return {
+        name: name,
+        size: size
+      };
+    }
+
+    function mapCommits(commit) {
+      return commit.commit;
     }
   }
 })();

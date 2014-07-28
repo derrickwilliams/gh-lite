@@ -23,14 +23,35 @@
     };
 
     function getUserData(user) {
-      return $http.get(apiUrl + 'users/' + user)
+      var getOptions;
+
+      getOptions = {
+        url: apiUrl + 'users/' + user,
+        headers: {
+          'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
+        },
+        method: 'GET'
+      };
+
+      return $http(getOptions)
         .then(prepareUserData);
     }
 
     function getUserRepos(user) {
-      return $http.get(apiUrl + 'users/' + user + '/repos')
+      var getOptions;
+
+      getOptions = {
+        url: apiUrl + 'users/' + user + '/repos',
+        headers: {
+          'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
+        },
+        method: 'GET'
+      };
+
+      return $http(getOptions)
         .then(prepare)
         .then(getLanguages)
+        .then(getCommits)
         .then(indexByName);
 
       function prepare(response) {
@@ -42,7 +63,8 @@
           return {
             name: repo.name,
             url: repo.html_url,
-            languages: repo.languages_url
+            languages: repo.languages_url,
+            commits: repo.commits_url
           };
         });
 
@@ -53,7 +75,7 @@
         var 
           deferred = $q.defer();
 
-        $q.all(getLanguagePromises(repos))
+        $q.all(getPromises(repos, 'languages'))
           .then(setAllLanguages)
           .catch(allLanguagesError);
 
@@ -72,25 +94,89 @@
         }
       }
 
+      function getCommits(repos) {
+        var 
+          deferred = $q.defer();
+
+        repos = _.map(repos, function(r) {
+          r.commits = r.commits.replace('{/sha}', '');
+          return r;
+        });
+
+        $q.all(getPromises(repos, 'commits'))
+          .then(removeNulls)
+          .then(setCommits)
+          .catch(commitsError);
+
+        return deferred.promise;
+
+        function removeNulls(repos) {
+          return _.filter(repos, function filterNulls(r) {
+            return r !== null;
+          });
+        }
+
+        function setCommits(results) {
+          _.each(results, function setLanguages(result, i) {
+            repos[i].commits = result.data;
+          });
+
+          deferred.resolve(repos);
+        }
+
+        function commitsError(err){
+          deferred.reject(err);
+        }
+      }
+
       function indexByName(repos) {
         var indexed = {};
 
-        _.each(repos, function byName(repo) {
-          indexed[repo.name] = repo;
-        });
+        _.each(repos, byName);
 
         return indexed;
+
+        function byName(repo) {
+          indexed[repo.name] = repo;
+        }
       }
 
-      function getLanguagePromises(repos) {
-        return _.map(repos, function(repo) {
-          return $http.get(repo.languages);
-        });
+      function getPromises(repos, prop) {
+        var getOptions;
+
+        getOptions = {
+          headers: {
+            'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
+          },
+          method: 'GET'
+        };
+
+        return _.map(repos, mapToPromises);
+
+        function mapToPromises(repo) {
+          getOptions.url = repo[prop];
+          
+          return $http(getOptions)
+            .catch(handleErrorsWithNull);
+        }
+
+        function handleErrorsWithNull(err) {
+          return Promise.resolve(null);
+        }
       }
     }
 
     function getRepoData(user, repo) {
-      return $http.get(apiUrl + '/repos/' + user + '/' + repo + '/stats')
+      var getOptions;
+
+      getOptions = {
+        url: apiUrl + '/repos/' + user + '/' + repo + '/stats',
+        headers: {
+          'Authorization': 'token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4'
+        }
+      };
+
+      return $http.get(getOptions)
         .then(function(data) {
           console.log('got repo data', data);
         });
@@ -106,6 +192,10 @@
         company: d.company || '(no company)',
         reposUrl: d.repos_url
       };
+    }
+
+    function getRequestOptions(url) {
+
     }
   }
 

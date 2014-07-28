@@ -10,10 +10,8 @@ gulp.task('build', ['build:sass', 'build:js']);
 
 gulp.task('build:sass', function() {
   gulp.src('./assets/css/**/*.scss')
-    .pipe(watch(function(files) {
-      return files.pipe(sass())
-        .pipe(gulp.dest('./assets/css'));
-    })); 
+    .pipe(sass())
+    .pipe(gulp.dest('./assets/css'));
 });
 
 gulp.task('build:js', ['build:controllers', 'build:services'], function() {
