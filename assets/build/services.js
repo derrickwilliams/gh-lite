@@ -205,7 +205,7 @@
         }
 
         function handleErrorsWithNull(err) {
-          return Promise.resolve(null);
+          return null;
         }
       }
     }

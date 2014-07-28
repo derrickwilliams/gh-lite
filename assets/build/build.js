@@ -80,14 +80,20 @@
     'githubApi',
     'dataStore',
     'targetUser',
+    '$state',
     fn
   ];
 
   app.controller('RepoDetailsController', definition);
 
-  function fn($scope, $stateParams, gh, ds, user) {
+  function fn($scope, $stateParams, gh, ds, user, $state) {
     var 
       repo;
+
+    if (!ds.exists('repos')) {
+      $state.go('home');
+      return;
+    }
 
     repo = ds.get('repos')[$stateParams.repo_name];
 
@@ -163,19 +169,25 @@
     'githubApi',
     'dataStore',
     'stats',
+    '$state',
     fn
   ];
 
   app.controller('UserReposController', definition);
 
-  function fn($scope, targetUser, gh, ds, stats) {
+  function fn($scope, targetUser, gh, ds, stats, $state) {
     var
       user = targetUser.get(),
       loading = true;
 
+    if (!user) {
+      $state.go('home');
+      return;
+    }
+
     $scope.detailsUrl = detailsUrl;
     $scope.isLoading = isLoading;
-    
+
     if (ds.exists('repos')) {
       showUserRepos(ds.get('repos'));
       showRepoStats();
@@ -616,7 +628,7 @@
         }
 
         function handleErrorsWithNull(err) {
-          return Promise.resolve(null);
+          return null;
         }
       }
     }
