@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1">
+
   <title></title>
   <link href="/assets/components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
@@ -9,6 +11,8 @@
 </head>
 <body ng-app="ghLite">
   <div ui-view></div>
+
+  <div id="err"></div>
 
   <script src="/assets/components/lodash/dist/lodash.js"></script>
   <script src="/assets/components/jquery/dist/jquery.js"></script>
@@ -20,5 +24,11 @@
   <script src="/assets/components/angular/angular.js"></script>
   <script src="/assets/components/angular-ui-router/release/angular-ui-router.js"></script>
   <script src="/assets/build/build.js"></script>
+  <script>
+    function L(msg) {
+      var d = document.getElementById('err');
+      d.innerText += "\n" + msg;
+    }
+  </script>
 </body>
 </html>
