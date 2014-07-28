@@ -1,11 +1,13 @@
 # GH Lite
 Simple Angular-driven app that talks to Github API
 
-## User Locally
+## Use Locally
 ### Clone this repository
 ```git clone git@github.com:derrickwilliams/gh-lite.git```
 
 ```cd gh-lite```
+
+Choose latest 'step-' branch for most recent version of app.
 
 ### Start node server
 
