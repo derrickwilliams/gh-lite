@@ -6,13 +6,13 @@
 
   definition = [
     '$q',
-    '$http',
+    'ghLiteHttp',
     fn
   ];
 
   app.factory('githubApi', definition);
 
-  function fn($q, $http) {
+  function fn($q, http) {
     var
       apiUrl = 'https://api.github.com/';
 
@@ -27,13 +27,9 @@
 
       getOptions = {
         url: apiUrl + 'users/' + user,
-        headers: {
-          'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
-        },
-        method: 'GET'
       };
 
-      return $http(getOptions)
+      return http(getOptions)
         .then(prepareUserData);
     }
 
@@ -41,14 +37,10 @@
       var getOptions;
 
       getOptions = {
-        url: apiUrl + 'users/' + user + '/repos',
-        headers: {
-          'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
-        },
-        method: 'GET'
+        url: apiUrl + 'users/' + user + '/repos'
       };
 
-      return $http(getOptions)
+      return http(getOptions)
         .then(prepare)
         .then(getLanguages)
         .then(getCommits)
@@ -142,21 +134,10 @@
       }
 
       function getPromises(repos, prop) {
-        var getOptions;
+        return _.map(repos, toPromises);
 
-        getOptions = {
-          headers: {
-            'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
-          },
-          method: 'GET'
-        };
-
-        return _.map(repos, mapToPromises);
-
-        function mapToPromises(repo) {
-          getOptions.url = repo[prop];
-          
-          return $http(getOptions)
+        function toPromises(repo) {          
+          return http({ url: repo[prop] })
             .catch(handleErrorsWithNull);
         }
 
@@ -167,16 +148,9 @@
     }
 
     function getRepoData(user, repo) {
-      var getOptions;
-
-      getOptions = {
-        url: apiUrl + '/repos/' + user + '/' + repo + '/stats',
-        headers: {
-          'Authorization': 'token 5199831f4dd3b79e7c5b7e0ebe75d67aa66e79d4'
-        }
-      };
-
-      return $http.get(getOptions)
+      var url = apiUrl + '/repos/' + user + '/' + repo + '/stats';
+      
+      return http.get({ url: url })
         .then(function(data) {
           console.log('got repo data', data);
         });

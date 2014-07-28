@@ -1,6 +1,7 @@
-<form ng-submit="onSubmit()">
-  <label for="userName">Username</label></br />
-  <input type="text" name="userName" id="userName" placeholder="enter github username" ng-model="userName" />
+<div class="my-container">
+  <form ng-submit="onSubmit()" class="username-form">
+    <input class="sm-full md-half username-input" type="text" name="username" id="username" placeholder="enter github username" ng-model="username" />
 
-  <input type="submit" value="Get User Info" />
-</form>
+    <input class="sm-full md-half get-user-info-submit dw-btn" type="submit" value="Get User Info"  ng-disabled="submitDisabled()" />
+  </form>
+</div>

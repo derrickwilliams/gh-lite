@@ -1,16 +1,31 @@
 (function() {
 
-  var app = angular.module('ghLite');
+  var 
+    app = angular.module('ghLite'),
+    definition;
 
-  app.controller('HomeController', ['$scope', '$state', function($scope, $state) {
-    $scope.userName = '';
+  definition = [
+    '$scope',
+    '$state',
+    'dataStore',
+    fn 
+  ];
+
+  app.controller('HomeController', definition);
+
+  function fn($scope, $state, ds) {
+    $scope.username = '';
     $scope.onSubmit = onSubmit;
-
-    debugger
+    $scope.submitDisabled = submitDisabled;
 
     function onSubmit(e) {
-      $state.go('user_details', { username: $scope.userName });
+      ds.set('repos', undefined);
+      $state.go('user_details', { username: $scope.username });
     }
-  }]);
+
+    function submitDisabled() {
+      return $scope.username.length === 0;
+    }
+  }
 
 })();

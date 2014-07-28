@@ -26,6 +26,7 @@
     if (ds.exists('repos')) {
       showUserRepos(ds.get('repos'));
       showRepoStats();
+      setNotLoading();
     }
     else {
       gh.getUserRepos(user.username)

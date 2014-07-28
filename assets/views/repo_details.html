@@ -1,14 +1,16 @@
 <div class="my-container">
   <h1 class="text-center main-header">{{repo.name}}</h1>
 
-  <p class="view-notice" ng-if="!hasLanguages()">This repo has no detectable languages. <a href="{{repo.url}}">View on github.</a></p>
+  <div class="sm-full md-half">
+    <h3>Language breakdown</h3>
+    
+    <p class="view-notice" ng-if="!hasLanguages()">This repo has no detectable languages. <a href="{{repo.url}}">View on github.</a></p>
 
-  <div ng-if="hasLanguages()" class="sm-full md-half">
-    <div id="languagesChart"></div>
+    <div ng-if="hasLanguages()" id="languagesChart"></div>
   </div>
 
   <div class=" sm-full md-half">
-    <h3>Last 5 commits</h3>
+    <h3>Most recent commits</h3>
     <ul class="commits-list">
       <li ng-repeat="commit in commits | limitTo: 5">
         <strong>"{{commit.message}}"</strong><br />
