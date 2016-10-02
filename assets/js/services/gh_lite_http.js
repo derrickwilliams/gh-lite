@@ -20,7 +20,7 @@
 
       defaults = {
         headers: {
-          'Authorization': 'token 19ac7ba3181784b26378176b3c2c498664399084'
+          'Authorization': 'token ' + window.localData.API_TOKEN
         },
         method: 'GET'
       };

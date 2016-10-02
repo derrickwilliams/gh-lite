@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 var
   express = require('express'),
   app = express(),
@@ -10,6 +12,10 @@ app.set('view engine', 'ejs');
 app.use(router);
 
 router.get('/', function(req, res) {
+  res.locals.localData = JSON.stringify({
+    API_TOKEN: process.env.GH_API_TOKEN
+  });
+
   res.render('index.ejs');
 });
 
